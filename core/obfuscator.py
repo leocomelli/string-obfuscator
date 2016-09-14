@@ -20,6 +20,7 @@ class StringObfuscator:
 
         self.__replace__(words, self.list_patterns(), self.DEFAULT_PATTERN_REPLACEMENT)
         self.__replace__(words, self.list_nnp(), self.DEFAULT_NNP_REPLACEMENT)
+        self.__merge_compound_nnp__(words)
 
         return " ".join(w for w in words)
 
@@ -27,7 +28,16 @@ class StringObfuscator:
         if len(patterns) == 0:
             return words
 
-        for i, w in enumerate(words):
-            for p, r in patterns.items():
+        for p, r in patterns.items():
+            for i, w in enumerate(words):
                 r = default_replacement if r == '' or r is None else r
                 words[i] = re.sub(p, r, w)
+
+    def __merge_compound_nnp__(self, words):
+        is_compound = False
+        for i, word in enumerate(words):
+            if word == self.DEFAULT_NNP_REPLACEMENT and is_compound:
+                del words[i]
+                continue
+            else:
+                is_compound = True if word == self.DEFAULT_NNP_REPLACEMENT else False

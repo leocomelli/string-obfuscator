@@ -58,8 +58,14 @@ class TestStringObfuscator(unittest.TestCase):
         self.assertEqual(text, obfuscated)
 
     def test_should_replace_nnp(self):
+        o = StringObfuscator(None, {'John' : ''})
+        text = "his name is [NNP]"
+        obfuscated = o.obfuscate("his name is John")
+        self.assertEqual(text, obfuscated)
+
+    def test_should_replace_compound_nnp(self):
         o = StringObfuscator(None, {'John' : '', 'Doe' : ''})
-        text = "his name is [NNP] [NNP]"
+        text = "his name is [NNP]"
         obfuscated = o.obfuscate("his name is John Doe")
         self.assertEqual(text, obfuscated)
 
