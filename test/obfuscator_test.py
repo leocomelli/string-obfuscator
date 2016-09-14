@@ -1,3 +1,5 @@
+#-*- coding: iso-8859-15 -*-
+
 import unittest
 from core.obfuscator import StringObfuscator
 
@@ -68,6 +70,12 @@ class TestStringObfuscator(unittest.TestCase):
         text = "his name is [NNP]"
         obfuscated = o.obfuscate("his name is John Doe")
         self.assertEqual(text, obfuscated)
+
+    def test_should_load_patterns_and_nnp_from_file(self):
+        o = StringObfuscator()
+        o.load_patterns_and_nnp("patterns.txt", "nnp_ptBR.txt")
+        self.assertEquals(3, len(o.list_patterns()))
+        self.assertEquals(4, len(o.list_nnp()))
 
 if __name__ == '__main__':
     unittest.main()

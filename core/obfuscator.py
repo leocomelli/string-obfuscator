@@ -1,4 +1,7 @@
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 class StringObfuscator:
 
@@ -14,6 +17,12 @@ class StringObfuscator:
 
     def list_nnp(self):
         return self.__nnp_registered if self.__nnp_registered is not None else {}
+
+    def load_patterns_and_nnp(self, patterns_file, nnp_file):
+        logging.warning("loading patterns and nnp from files")
+        self.__patterns_registered = self.__read_file_content([line.strip() for line in open(patterns_file, 'r')])
+        self.__nnp_registered = self.__read_file_content([line.strip() for line in open(nnp_file, 'r')])
+
 
     def obfuscate(self, text):
         words = text.split(" ")
@@ -35,9 +44,20 @@ class StringObfuscator:
 
     def __merge_compound_nnp__(self, words):
         is_compound = False
+
         for i, word in enumerate(words):
             if word == self.DEFAULT_NNP_REPLACEMENT and is_compound:
                 del words[i]
                 continue
             else:
                 is_compound = True if word == self.DEFAULT_NNP_REPLACEMENT else False
+
+    def __read_file_content(self, lines):
+        d = {}
+        for line in lines:
+            cols = line.split()
+            d[cols[0]] = '' if len(cols) == 1 else cols[1]
+
+        return d
+
+
