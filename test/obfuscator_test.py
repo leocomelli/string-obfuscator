@@ -45,5 +45,11 @@ class TestStringObfuscator(unittest.TestCase):
         obfuscated = o.obfuscate("my cpf number is 564.987.456-99")
         self.assertEqual(obfuscated, text)
 
+    def test_should_replace_string_default_replacement(self):
+        o = StringObfuscator({'^s.*t$': ''})
+        text = "his password is [PATTERN]"
+        obfuscated = o.obfuscate("his password is secret")
+        self.assertEqual(obfuscated, text)
+
 if __name__ == '__main__':
     unittest.main()
