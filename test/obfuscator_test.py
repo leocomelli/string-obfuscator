@@ -77,5 +77,12 @@ class TestStringObfuscator(unittest.TestCase):
         self.assertEquals(3, len(o.list_patterns()))
         self.assertEquals(4, len(o.list_nnp()))
 
+    def test_should_load_and_obfuscate(self):
+        o = StringObfuscator()
+        o.load_patterns_and_nnp("patterns.txt", "nnp_ptBR.txt")
+        text = "the password of [NOME] is [PADRAO] don't [PADRAO] it"
+        obfuscated = o.obfuscate("the password of Carlos Eduardo is secret don't forget it")
+        self.assertEqual(text, obfuscated)
+
 if __name__ == '__main__':
     unittest.main()

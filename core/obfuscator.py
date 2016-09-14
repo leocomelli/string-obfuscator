@@ -44,13 +44,15 @@ class StringObfuscator:
 
     def __merge_compound_nnp__(self, words):
         is_compound = False
+        replacements = self.list_nnp().values()
+        replacements.append(self.DEFAULT_NNP_REPLACEMENT)
 
         for i, word in enumerate(words):
-            if word == self.DEFAULT_NNP_REPLACEMENT and is_compound:
+            if word in replacements and is_compound:
                 del words[i]
                 continue
             else:
-                is_compound = True if word == self.DEFAULT_NNP_REPLACEMENT else False
+                is_compound = True if word in replacements else False
 
     def __read_file_content(self, lines):
         d = {}
