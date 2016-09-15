@@ -47,6 +47,15 @@ class StringObfuscator:
         replacements = self.list_nnp().values()
         replacements.append(self.DEFAULT_NNP_REPLACEMENT)
 
+        # remove the word that joins the compound names
+        for i, word in enumerate(words):
+            if len(words) > i +2 and \
+               word in replacements and \
+               len(words[i +1]) <= 3 and \
+               words[i +2] in replacements:
+                del words[i +1]
+
+        # remove the second occurrence of replacement
         for i, word in enumerate(words):
             if word in replacements and is_compound:
                 del words[i]

@@ -71,6 +71,12 @@ class TestStringObfuscator(unittest.TestCase):
         obfuscated = o.obfuscate("his name is John Doe")
         self.assertEqual(text, obfuscated)
 
+    def test_should_replace_compound_nnp1(self):
+        o = StringObfuscator(None, {'John' : '', 'Doe' : ''})
+        text = "his name is [NNP]"
+        obfuscated = o.obfuscate("his name is John of Doe")
+        self.assertEqual(text, obfuscated)
+
     def test_should_load_patterns_and_nnp_from_file(self):
         o = StringObfuscator()
         o.load_patterns_and_nnp("resources/patterns.txt", "resources/nnp_ptBR.txt")
