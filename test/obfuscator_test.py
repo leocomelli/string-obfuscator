@@ -73,7 +73,7 @@ class TestStringObfuscator(unittest.TestCase):
 
     def test_should_load_patterns_and_nnp_from_file(self):
         o = StringObfuscator()
-        o.load_patterns_and_nnp("patterns.txt", "nnp_ptBR.txt")
+        o.load_patterns_and_nnp("resources/patterns.txt", "resources/nnp_ptBR.txt")
         self.assertEquals(3, len(o.list_patterns()))
         self.assertEquals(4, len(o.list_nnp()))
 
