@@ -25,7 +25,9 @@ class NnpHandler:
 
 
 if __name__ == '__main__':
-    files = ['sources/pt_BR/name_1', 'sources/pt_BR/name_2', 'sources/pt_BR/surname_1', 'sources/pt_BR/surname_2', 'sources/pt_BR/surname_3', 'sources/pt_BR/surname_4',]
+    files = ['sources/pt_BR/name_1', 'sources/pt_BR/name_2', \
+             'sources/pt_BR/surname_1', 'sources/pt_BR/surname_2', \
+             'sources/pt_BR/surname_3', 'sources/pt_BR/surname_4',]
     h = NnpHandler(files)
     c = h.merge()
 
