@@ -44,7 +44,7 @@ class StringObfuscator:
         for p, r in patterns.items():
             for i, w in enumerate(words):
                 r = default_replacement if r == '' or r is None else r
-                words[i] = re.sub(p, r, w)
+                words[i] = re.sub(r'\b%s\b' % p, r, w)
 
     def __merge_compound_nnp__(self, words):
         is_compound = False

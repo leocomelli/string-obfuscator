@@ -36,7 +36,7 @@ class TestStringObfuscator(unittest.TestCase):
         self.assertEqual(text, obfuscated)
 
     def test_should_replace_string_with_basic_regex(self):
-        o = StringObfuscator({'^s.*t$' : '***'})
+        o = StringObfuscator({'s.*t' : '***'})
         text = "his password is ***"
         obfuscated = o.obfuscate("his password is secret")
         self.assertEqual(text, obfuscated)
@@ -54,7 +54,7 @@ class TestStringObfuscator(unittest.TestCase):
         self.assertEqual(text, obfuscated)
 
     def test_should_replace_string_default_replacement(self):
-        o = StringObfuscator({'^s.*t$': ''})
+        o = StringObfuscator({'s.*t': ''})
         text = "his password is [PATTERN]"
         obfuscated = o.obfuscate("his password is secret")
         self.assertEqual(text, obfuscated)
