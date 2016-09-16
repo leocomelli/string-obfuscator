@@ -1,4 +1,4 @@
-#-*- coding: iso-8859-15 -*-
+# -*- coding: utf-8 -*-
 
 import unittest
 from core.obfuscator import StringObfuscator
@@ -62,19 +62,20 @@ class TestStringObfuscator(unittest.TestCase):
     def test_should_replace_nnp(self):
         o = StringObfuscator(None, {'John' : ''})
         text = "his name is [NNP]"
-        obfuscated = o.obfuscate("his name is John")
+        obfuscated = o.obfuscate("his name is john")
         self.assertEqual(text, obfuscated)
 
     def test_should_replace_compound_nnp(self):
         o = StringObfuscator(None, {'John' : '', 'Doe' : ''})
         text = "his name is [NNP]"
-        obfuscated = o.obfuscate("his name is John Doe")
+        obfuscated = o.obfuscate("his name is john doe")
         self.assertEqual(text, obfuscated)
 
     def test_should_replace_compound_nnp1(self):
         o = StringObfuscator(None, {'John' : '', 'Doe' : ''})
         text = "his name is [NNP]"
-        obfuscated = o.obfuscate("his name is John of Doe")
+        sanitized_text = o.sanitize_data("his name is John of Doe")
+        obfuscated = o.obfuscate(sanitized_text)
         self.assertEqual(text, obfuscated)
 
     def test_should_load_patterns_and_nnp_from_file(self):
@@ -85,9 +86,18 @@ class TestStringObfuscator(unittest.TestCase):
 
     def test_should_load_and_obfuscate(self):
         o = StringObfuscator()
-        o.load_patterns_and_nnp("patterns.txt", "nnp_ptBR.txt")
-        text = "the password of [NOME] is [PADRAO] don't [PADRAO] it"
-        obfuscated = o.obfuscate("the password of Carlos Eduardo is secret don't forget it")
+        o.load_patterns_and_nnp("resources/patterns.txt", "resources/nnp_ptBR.txt")
+        text = "the password of [NOME] is something like [PADRAO] don't [PADRAO] it"
+        sanitized_text = o.sanitize_data("the password of Carlos Eduardo is something like secret don't forget it")
+        obfuscated = o.obfuscate(sanitized_text)
+        self.assertEqual(text, obfuscated)
+
+    def test_should_sanitize_data_and_obfuscate_nnp(self):
+        o = StringObfuscator()
+        o.load_patterns_and_nnp("resources/patterns.txt", "resources/nnp_ptBR.txt")
+        text = "his name is [NNP]"
+        sanitized_text = o.sanitize_data("his name is João dos Gonçalves")
+        obfuscated = o.obfuscate(sanitized_text)
         self.assertEqual(text, obfuscated)
 
 if __name__ == '__main__':

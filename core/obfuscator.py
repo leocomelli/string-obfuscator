@@ -1,5 +1,6 @@
 import re
 import logging
+import unicodedata
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +11,7 @@ class StringObfuscator:
 
     def __init__(self, patterns = None, nnp = None):
       self.__patterns_registered = patterns
-      self.__nnp_registered = nnp
+      self.__set_nnp_registered__(nnp)
 
     def list_patterns(self):
         return self.__patterns_registered if self.__patterns_registered is not None else {}
@@ -21,8 +22,11 @@ class StringObfuscator:
     def load_patterns_and_nnp(self, patterns_file, nnp_file):
         logging.warning("loading patterns and nnp from files")
         self.__patterns_registered = self.__read_file_content([line.strip() for line in open(patterns_file, 'r')])
-        self.__nnp_registered = self.__read_file_content([line.strip() for line in open(nnp_file, 'r')])
+        self.__set_nnp_registered__(self.__read_file_content([line.strip() for line in open(nnp_file, 'r')]))
 
+    def sanitize_data(self, text):
+        return ''.join((c for c in unicodedata.normalize('NFD', text.decode('utf-8', 'ignore')) \
+                        if unicodedata.category(c) != 'Mn')).lower().encode('utf-8')
 
     def obfuscate(self, text):
         words = text.split(" ")
@@ -68,7 +72,9 @@ class StringObfuscator:
         for line in lines:
             cols = line.split()
             d[cols[0]] = '' if len(cols) == 1 else cols[1]
-
         return d
+
+    def __set_nnp_registered__(self, nnp):
+        self.__nnp_registered = dict((self.sanitize_data(k), v) for k, v in nnp.iteritems()) if nnp is not None else nnp
 
 
